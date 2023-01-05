@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rutas_app/screens/screens.dart';
 
-void main() => runApp(const MyApp());
+import 'blocs/blocs.dart';
+
+void main()  {
+  runApp(MultiBlocProvider(providers: [
+     BlocProvider(create: (context) => GpsBloc(),),
+  ], child: const MyApp()));}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,15 +15,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      initialRoute: LoadingScreen().ruta,
+      routes: {
+        GpsAccessScreen().ruta :(context) =>GpsAccessScreen(),
+        MapScreen().ruta :(context) =>MapScreen(),
+        LoadingScreen().ruta :(context) =>LoadingScreen(),
+
+      },
+
     );
   }
 }
