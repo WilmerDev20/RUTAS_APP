@@ -7,6 +7,11 @@ import 'blocs/blocs.dart';
 void main()  {
   runApp(MultiBlocProvider(providers: [
      BlocProvider(create: (context) => GpsBloc(),),
+     BlocProvider(create: (context) => LocationBloc(),),
+     BlocProvider(create: (context) => MapaBloc(),),
+
+
+
   ], child: const MyApp()));}
 
 class MyApp extends StatelessWidget {
