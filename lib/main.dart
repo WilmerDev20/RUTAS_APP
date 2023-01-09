@@ -6,9 +6,9 @@ import 'blocs/blocs.dart';
 
 void main()  {
   runApp(MultiBlocProvider(providers: [
-     BlocProvider(create: (context) => GpsBloc(),),
+     BlocProvider(create: (context) => GpsBloc(),), //el orden es importante si vamos a hacer dependencias de un bloc con otro
      BlocProvider(create: (context) => LocationBloc(),),
-     BlocProvider(create: (context) => MapaBloc(),),
+     BlocProvider(create: (context) => MapaBloc(locationBloc: BlocProvider.of<LocationBloc>(context)),),
 
 
 

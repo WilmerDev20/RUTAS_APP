@@ -12,7 +12,19 @@ class OnMapInitialzed extends MapaEvent{
 
   const OnMapInitialzed(this.controller);
 
-
-
-
 }
+
+
+class OnStartFollowingUserEvent extends MapaEvent{}
+
+
+class OnStopFollowingUserEvent extends MapaEvent{}
+
+class UpdateUserPolylineEvent extends MapaEvent{
+  final List<LatLng> userHistory;
+
+  const UpdateUserPolylineEvent(this.userHistory);
+}
+
+
+class OnToggleUserRouteEvent extends MapaEvent{}

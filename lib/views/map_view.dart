@@ -8,8 +8,9 @@ import 'package:rutas_app/blocs/blocs.dart';
 class MapView extends StatelessWidget {
 
   final LatLng initialLocation;
+  final Set<Polyline> polylines;
 
-  const MapView({super.key, required this.initialLocation});
+  const MapView({super.key, required this.initialLocation, required this.polylines});
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +26,30 @@ class MapView extends StatelessWidget {
 
       width: size.width,
       height: size.height,
-      child: GoogleMap(
-        initialCameraPosition: initialCameraPosition,
-        compassEnabled: false,
-        myLocationEnabled: true,
-        zoomControlsEnabled: false,
-        myLocationButtonEnabled: false,
+      child: Listener(
+        onPointerMove: (event) {
+          mapBloc.add(OnStopFollowingUserEvent());// al usuario mover la pantalla, deja de seguir al usuario
+        },
+        child: GoogleMap(
+          initialCameraPosition: initialCameraPosition,
+          compassEnabled: false,
+          myLocationEnabled: true,
+          zoomControlsEnabled: false,
+          myLocationButtonEnabled: false,
+          polylines: polylines,
 
-        onMapCreated: (controller) => mapBloc.add(OnMapInitialzed(controller)),
+
+
+          onMapCreated: (controller) => mapBloc.add(OnMapInitialzed(controller)),
+          
+          //markers
+      
+          //polylines
+      
+      
         
-        //markers
-
-        //polylines
-
-
-        //cuando se mueve el mapa
-
-
-        ));
+      
+          ),
+      ));
   }
 }

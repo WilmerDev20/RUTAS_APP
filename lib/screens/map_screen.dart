@@ -43,19 +43,35 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
       body: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, state) {
+        builder: (context, locationState) {
           
-          if(state.lastKnowLocation==null) return Center(child: Text('No ubicacion,espere porfavor'),);
+          if(locationState.lastKnowLocation==null) return Center(child: Text('No ubicacion,espere porfavor'),);
            
-          return  SingleChildScrollView(
-            
-            child: Stack(
-                children:  [
-                  MapView(initialLocation: LatLng(state.lastKnowLocation!.latitude, state.lastKnowLocation!.longitude),)
-          
-                //botones...
-                ],
-            ),
+          return  BlocBuilder<MapaBloc, MapaState>(
+            builder: (context, mapaState) {
+
+
+
+              Map<String, Polyline> polylines = Map.from(mapaState.polylines);
+
+              if(!mapaState.showMyRoute){//! si showMyRoute esta en false entonces haga esto 
+                polylines.removeWhere((key, value) => key=='myRoute');
+              }
+
+
+              return SingleChildScrollView(
+                      
+                      child: Stack(
+                          children:  [
+                            MapView(
+                              initialLocation: LatLng(locationState.lastKnowLocation!.latitude, locationState.lastKnowLocation!.longitude),
+                              polylines:polylines.values.toSet(),)
+                    
+                          //botones...
+                          ],
+                      ),
+                    );
+            },
           );
         },
       ),
@@ -63,7 +79,9 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: const [
-          BtnCurrentLocation()
+          BtnToggleUserRoute(),
+          BtnFollowUser(),
+          BtnCurrentLocation(),
 
 
         ],
