@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rutas_app/screens/screens.dart';
+import 'package:rutas_app/services/services.dart';
 
 import 'blocs/blocs.dart';
 
@@ -9,8 +10,7 @@ void main()  {
      BlocProvider(create: (context) => GpsBloc(),), //el orden es importante si vamos a hacer dependencias de un bloc con otro
      BlocProvider(create: (context) => LocationBloc(),),
      BlocProvider(create: (context) => MapaBloc(locationBloc: BlocProvider.of<LocationBloc>(context)),),
-
-
+     BlocProvider(create: (context) => SearchBloc(trafficServices: TrafficServices()),),
 
   ], child: const MyApp()));}
 

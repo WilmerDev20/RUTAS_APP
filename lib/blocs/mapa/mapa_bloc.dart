@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rutas_app/blocs/blocs.dart';
+import 'package:rutas_app/models/models.dart';
 import 'package:rutas_app/themes/themes.dart';
 
 part 'mapa_event.dart';
@@ -14,14 +15,16 @@ part 'mapa_state.dart';
 class MapaBloc extends Bloc<MapaEvent, MapaState> {
 
   final LocationBloc locationBloc; 
-
-   StreamSubscription<LocationState>? locationStateSubscription;
-
-
+  StreamSubscription<LocationState>? locationStateSubscription;
   GoogleMapController?  _mapController;
 
-  MapaBloc({required this.locationBloc}) : super(MapaState()) {
+  LatLng? mapCenter;
 
+
+
+
+  // bloc//
+  MapaBloc({required this.locationBloc}) : super(MapaState()) {
 
     on<OnMapInitialzed>(_onInitMap);
 
@@ -33,26 +36,17 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     if(locationState.lastKnowLocation !=null){
       add(UpdateUserPolylineEvent(locationState.myLocationHistory));
     }
-
-
-
       moveCamera(LatLng(locationState.lastKnowLocation!.latitude, locationState.lastKnowLocation!.longitude));
-
-
-
-
     });
-
 
     on<OnStartFollowingUserEvent>(_onStartFollowinUser);
 
 
-       on<OnStopFollowingUserEvent>((event, emit) {
+    on<OnStopFollowingUserEvent>((event, emit) {
 
       emit(state.copywith(isFollowingUser: false));
 
     });
-
 
     on<UpdateUserPolylineEvent>(_onPolylineNewPoint);
 
@@ -62,7 +56,15 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
 
 
 
-  }
+    on<DisplayPolylineEvent>((event, emit) {
+      emit(state.copywith(polylinesC: event.polylines));
+    });
+
+
+
+
+
+  }//end bloc
   
     void _onInitMap(OnMapInitialzed event,Emitter<MapaState> emit){
 
@@ -113,6 +115,26 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
         emit(state.copywith(polylinesC: currentPolylines));
 
     }
+
+    Future drawRoutePolyline(RouteDestination destination)  async{
+
+        final myRoute= Polyline(
+          polylineId:  PolylineId('Route'),
+          width: 5,
+          color: Colors.grey,
+          points: destination.points,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap,
+          );
+
+
+  final currentPolylines=Map<String, Polyline>.from(state.polylines);
+  currentPolylines['Route']=myRoute;
+  add(DisplayPolylineEvent(currentPolylines));
+
+
+
+  }
 
 
     @override

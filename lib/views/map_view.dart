@@ -38,14 +38,13 @@ class MapView extends StatelessWidget {
           myLocationButtonEnabled: false,
           polylines: polylines,
 
-
-
           onMapCreated: (controller) => mapBloc.add(OnMapInitialzed(controller)),
+
+          onCameraMove: (position) => mapBloc.mapCenter=position.target,
           
           //markers
       
-          //polylines
-      
+       
       
         
       
