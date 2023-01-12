@@ -24,6 +24,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(state.copyWith(displayManualMarker: false));
     }); 
 
+    on<OnNewPlacesFoundEvent>((event, emit) {
+
+      emit(state.copyWith(placesC: event.places));
+
+    });
+
+
+    on<AddToHistoryEvent>((event, emit) => emit(state.copyWith(historyC: [event.place,...state.history])));
+
   }
 
   Future<RouteDestination> getCoordsStartToEnd(LatLng start, LatLng end) async{
@@ -48,4 +57,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       distance: distance!);
 
   }
+
+
+  Future getPlacesByQuery(LatLng proximity, String query) async{
+
+    final newPlaces = await trafficServices.getResultsByQuery(proximity, query);
+
+    add(OnNewPlacesFoundEvent(newPlaces));
+
+  }
+
+
+
 }

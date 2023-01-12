@@ -4,23 +4,32 @@ part of 'search_bloc.dart';
   
   final bool displayManualMarker;
   
-  
-  const SearchState({ this.displayManualMarker=false});
+  final List<Feature?> places;
+
+  final List<Feature?> history;
+
+
+  const SearchState( { this.places = const [],this.displayManualMarker=false,this.history = const []});
   
 
 
 
 
 SearchState copyWith({
-  bool? displayManualMarker
+  bool? displayManualMarker,
+  List<Feature?>? placesC,
+  List<Feature?>? historyC
 
 })=> SearchState(
-  displayManualMarker: displayManualMarker ?? this.displayManualMarker
+  displayManualMarker: displayManualMarker ?? this.displayManualMarker,
+  places: placesC ?? places,
+  history: historyC ?? history
+  
 );
 
 
   @override
-  List<Object> get props => [displayManualMarker];
+  List<Object> get props => [displayManualMarker,places,history];
 }
 
 
