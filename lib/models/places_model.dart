@@ -1,20 +1,18 @@
 // To parse this JSON data, do
 //
 //     final placesResponse = placesResponseFromMap(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 class PlacesResponse {
     PlacesResponse({
         required this.type,
-        required this.query,
+        // required this.query,
         required this.features,
         required this.attribution,
     });
 
     final String? type;
-    final List<String?>? query;
+    // final List<String?>? query;
     final List<Feature?> features;
     final String? attribution;
 
@@ -24,14 +22,14 @@ class PlacesResponse {
 
     factory PlacesResponse.fromMap(Map<String, dynamic> json) => PlacesResponse(
         type: json["type"],
-        query: json["query"] == null ? [] : List<String?>.from(json["query"]!.map((x) => x)),
+        // query: json["query"] == null ? [] : List<String?>.from(json["query"]!.map((x) => x)),
         features: json["features"] == null ? [] : List<Feature?>.from(json["features"]!.map((x) => Feature.fromMap(x))),
         attribution: json["attribution"],
     );
 
     Map<String, dynamic> toMap() => {
         "type": type,
-        "query": query == null ? [] : List<dynamic>.from(query!.map((x) => x)),
+        // "query": query == null ? [] : List<dynamic>.from(query!.map((x) => x)),
         "features": features == null ? [] : List<dynamic>.from(features!.map((x) => x!.toMap())),
         "attribution": attribution,
     };

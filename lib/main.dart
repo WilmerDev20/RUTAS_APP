@@ -21,12 +21,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Material App',
+      title: 'Rutas App',
       initialRoute: LoadingScreen().ruta,
       routes: {
         GpsAccessScreen().ruta :(context) =>GpsAccessScreen(),
         MapScreen().ruta :(context) =>MapScreen(),
         LoadingScreen().ruta :(context) =>LoadingScreen(),
+        TestMarkerScreen().ruta :(context) =>TestMarkerScreen(),
 
       },
 

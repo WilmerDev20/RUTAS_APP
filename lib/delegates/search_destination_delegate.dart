@@ -99,7 +99,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult>{
       children:  [
         ListTile(
           leading: Icon(Icons.location_on_outlined,color: Colors.black,),
-          title:  Text('Colocar la ubicacio manualmente',style: TextStyle(color: Colors.black),),
+          title:  Text('Colocar la ubicacion manualmente',style: TextStyle(color: Colors.black),),
           onTap: () {
             //Regresar algo 
             final result= SearchResult(cancel: false,manual: true);
@@ -107,6 +107,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult>{
           },
       
         ),
+        
 
         ...history.map((place) => ListTile(
           title: Text(place!.text),

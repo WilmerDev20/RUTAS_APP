@@ -14,26 +14,42 @@ part of 'mapa_bloc.dart';
   final Map<String, Polyline> polylines;
 
 
-  const MapaState( {Map<String, Polyline>? polylines,this.isMapInitialized= false,  this.isFollowingUser=true,this.showMyRoute=false}) : polylines = polylines ?? const {};
+  //Markers 
+  final Map<String, Marker> markers;
 
+
+  const MapaState( {
+     Map<String, Marker>? markers, 
+     Map<String, Polyline>? polylines,
+     this.isMapInitialized= false,  
+     this.isFollowingUser=true,
+     this.showMyRoute=false}) 
+     : polylines = polylines ?? const {},
+      markers = markers ?? const {};
+    
 
   MapaState copywith({
     bool? isMapInitialized,
     bool? isFollowingUser,
     Map<String, Polyline>? polylinesC,
+    Map<String, Marker>? markersC,
+
     bool? showMyRoute
 
   }
   ) => MapaState(
     isFollowingUser: isFollowingUser ?? this.isFollowingUser,
     isMapInitialized: isMapInitialized ?? this.isMapInitialized,
-    polylines: polylinesC ?? this.polylines,
+    polylines: polylinesC ?? polylines,
+    markers: markersC ?? markers,
     showMyRoute: showMyRoute?? this.showMyRoute
   );
 
 
     @override
-  List<Object> get props => [isMapInitialized,isFollowingUser,polylines,showMyRoute];
+  List<Object> get props => [isMapInitialized,isFollowingUser,polylines,markers,showMyRoute];
+
+
 }
 
 

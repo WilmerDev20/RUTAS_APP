@@ -44,12 +44,30 @@ Future <List<Feature?>> getResultsByQuery(LatLng proximity ,String query)async{
  
     
   final resp = await _dioPlaces.get(url,queryParameters: {
-    'proximity':'${proximity.longitude},${proximity.latitude}'
+    'proximity':'${proximity.longitude},${proximity.latitude}',
+    'limit':7
   });
 
   final placesResponse= PlacesResponse.fromMap(resp.data);
 
   return placesResponse.features;
+
+
+}
+
+
+
+Future <Feature> getInformationByCoords(LatLng coords) async{
+
+final url ='$_basePlacesUrl/${coords.longitude},${coords.latitude}.json';
+
+final resp= await _dioPlaces.get(url,queryParameters: {
+  'limit':1,
+});
+
+final placesResponse= PlacesResponse.fromMap(resp.data);
+
+return placesResponse.features[0]!;
 
 
 }

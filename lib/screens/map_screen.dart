@@ -53,9 +53,11 @@ class _MapScreenState extends State<MapScreen> {
 
 
               Map<String, Polyline> polylines = Map.from(mapaState.polylines);
+              Map<String, Marker> markers = Map.from(mapaState.markers);
 
               if(!mapaState.showMyRoute){//! si showMyRoute esta en false entonces haga esto 
                 polylines.removeWhere((key, value) => key=='myRoute');
+                polylines.removeWhere((key, value) => key=='Route');
               }
 
 
@@ -65,7 +67,9 @@ class _MapScreenState extends State<MapScreen> {
                           children:  [
                             MapView(
                               initialLocation: LatLng(locationState.lastKnowLocation!.latitude, locationState.lastKnowLocation!.longitude),
-                              polylines:polylines.values.toSet(),),
+                              polylines:polylines.values.toSet(),
+                              markers: markers.values.toSet(),
+                              ),
                               SearchBar(),
                               ManualMarker(),
                     

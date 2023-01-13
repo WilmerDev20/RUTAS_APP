@@ -6,11 +6,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rutas_app/blocs/blocs.dart';
+import 'package:rutas_app/helpers/helpers.dart';
 import 'package:rutas_app/models/models.dart';
 import 'package:rutas_app/themes/themes.dart';
 
 part 'mapa_event.dart';
 part 'mapa_state.dart';
+
+
+
+
 
 class MapaBloc extends Bloc<MapaEvent, MapaState> {
 
@@ -19,6 +24,8 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
   GoogleMapController?  _mapController;
 
   LatLng? mapCenter;
+
+  
 
 
 
@@ -51,13 +58,15 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     on<UpdateUserPolylineEvent>(_onPolylineNewPoint);
 
     on<OnToggleUserRouteEvent>((event, emit) {
+
+    
       emit(state.copywith(showMyRoute:!state.showMyRoute));//! si esta en true, que lo pase a false , o viceversa
     });
 
 
 
     on<DisplayPolylineEvent>((event, emit) {
-      emit(state.copywith(polylinesC: event.polylines));
+      emit(state.copywith(polylinesC: event.polylines,markersC: event.markers));
     });
 
 
@@ -118,6 +127,20 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
 
     Future drawRoutePolyline(RouteDestination destination)  async{
 
+        
+     
+
+      double kms = destination.distance/1000; //kilometros
+
+      kms= (kms * 100).floorToDouble();
+      kms /= 100;
+
+
+      int tripDuration= (destination.duration / 60).floorToDouble().toInt();//minutos a horas
+
+      final startMarkerPin= await getStartCustomMarker(tripDuration, 'Esta es tu posicion');
+      final endMarkerPin= await getEndCustomMarker(kms.toInt(), destination.endPlace.text);
+
         final myRoute= Polyline(
           polylineId:  PolylineId('Route'),
           width: 5,
@@ -128,15 +151,44 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
           );
 
 
-  final currentPolylines=Map<String, Polyline>.from(state.polylines);
-  currentPolylines['Route']=myRoute;
-  add(DisplayPolylineEvent(currentPolylines));
+        final startMarker = Marker(
+          markerId: MarkerId('start'),
+          position: destination.points.first,
+           icon: startMarkerPin,
+           anchor: Offset(0.06,0.9)
+          
+          );
+
+          final endMarker = Marker(
+          markerId: MarkerId('end'),
+          position: destination.points.last,
+          icon:endMarkerPin ,
+
+           );
+
+
+
+
+    final currentPolylines=Map<String, Polyline>.from(state.polylines);
+    currentPolylines['Route']=myRoute;
+
+  final currentMarkers=Map<String, Marker>.from(state.markers);
+  currentMarkers['start']=startMarker;
+  currentMarkers['end']=endMarker;
+
+    add(DisplayPolylineEvent(currentPolylines,currentMarkers));
+
+    await Future.delayed(Duration(milliseconds: 300));
+
+    _mapController?.showMarkerInfoWindow(MarkerId('start'));
+
+
 
 
 
   }
 
-
+   
     @override
   Future<void> close() {
     locationStateSubscription?.cancel();
